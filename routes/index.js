@@ -40,6 +40,25 @@ router.get('/posts', (req, res, next) => {
   executeQuery(sqlQuery, res);
 });
 
+router.get('/posts_all', (req, res, next) => {
+  const startDate = req.query.param1;
+  const endDate = req.query.param2;
+
+  const sqlQuery = `
+    SELECT 
+      TO_CHAR(fecha :: DATE, 'yyyy-mm-dd') as fecha, 
+      retweets,
+      polaridad,
+      text_
+    FROM public.vz_urbanatweet 
+    WHERE polaridad IS NOT NULL 
+      AND fecha BETWEEN TO_DATE('${startDate}', 'yyyy-mm-dd') 
+      AND TO_DATE('${endDate}', 'yyyy-mm-dd')`;
+
+  executeQuery(sqlQuery, res);
+});
+
+
 router.post('/login', (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
